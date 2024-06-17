@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Intersection Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div id="visualization"></div>
+    <script>
+        d3.csv("generated_curve.csv").then(function(data) {
+            const svg = d3.select("#visualization").append("svg")
+                .attr("width", 800)
+                .attr("height", 600);
+
+            const line = d3.line()
+                .x(d => +d.X)
+                .y(d => +d.Y);
+
+            svg.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "steelblue")
+                .attr("stroke-width", 1.5)
+                .attr("d", line);
+        });
+    </script>
+</body>
+</html>
