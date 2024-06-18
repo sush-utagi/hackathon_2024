@@ -1,6 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import re
+import numpy as np
+import matplotlib.colors as mcolors
 
 # Load and parse the intersections data
 def parse_intersections(file):
@@ -22,12 +24,20 @@ def parse_intersections(file):
 intersections_data_file = 'Data/B4_intersections.csv'
 intersections_df = parse_intersections(intersections_data_file)
 
+# Get a list of unique intersection IDs
+intersection_ids = intersections_df['IntersectionID'].unique()
+
+# Create a color map
+colors = list(mcolors.TABLEAU_COLORS.keys())
+color_map = {intersection_id: colors[i % len(colors)] for i, intersection_id in enumerate(intersection_ids)}
+
 # Create a plot
-fig, ax = plt.subplots(figsize=(10, 6))  # Increase the figure size for higher resolution
+fig, ax = plt.subplots(figsize=(10, 6))
 
 # Plot the intersections coordinates
 for intersection_id, group in intersections_df.groupby('IntersectionID'):
-    ax.plot(group['lon'], group['lat'], marker='o', linestyle='-', label=f'Intersection {intersection_id}')
+    color = color_map[intersection_id]
+    ax.plot(group['lon'], group['lat'], marker='o', linestyle='-', color=color, label=f'Intersection {intersection_id}')
 
 # Add labels and title
 ax.set_xlabel('Longitude')

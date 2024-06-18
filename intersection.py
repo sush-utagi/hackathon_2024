@@ -22,7 +22,7 @@ def parse_intersections(file):
         for line in f:
             line = line.strip()
             match = re.match(r'([^,]+),"LINESTRING\(([^)]+)\)"', line)
-            if(line[4] != '0'): continue
+            # if(line[4] != '0'): continue
             if match and line[0:6] == "INT_01":
                 intersection_id = match.group(1)
                 coordinates = match.group(2)
@@ -49,8 +49,6 @@ fig, ax = plt.subplots(figsize=(10, 6))  # Increase the figure size for higher r
 # Plot the road coordinates
 # ax.scatter(road_df['lon']+ 100, road_df['lat']-20, c='blue', marker='o', label='Road Points')
 
-
-
 # for (intersection_id, type_), group in intersections_df.groupby(['IntersectionID', 'type']):
 #     group = group.sort_values(by=['lat', 'lon'])
 #     latitudes = group['lat'].values
@@ -62,19 +60,35 @@ fig, ax = plt.subplots(figsize=(10, 6))  # Increase the figure size for higher r
 
 # Plot the intersections coordinates
 # for intersection_id, group in intersections_df.groupby('IntersectionID'):
+box = []
+routes = []
+first = True
 for type_, group in intersections_df.groupby('type'):
-    color = 'red' if type_ == 'box' else 'blue'
-    if type_ == 'special':
-        color = 'green'
+    if type_ == 'box':
+        color = 'red'
+    else:
+        if first:
+            first = False
+            color = 'green'
+        color = 'blue'
+    # if type_ == 'special':
+    #     color = 'green'
     for intersection_id, subgroup in group.groupby('IntersectionID'):
         ax.plot(subgroup['lon'], subgroup['lat'], marker='o', linestyle='-', color=color, label=f'Intersection {intersection_id} ({type_})')
     # ax.plot(group['lon'], group['lat'], marker='o', linestyle='-', label=f'Intersection {intersection_id}')
+
+
+
+
+
+
 
 # Add labels and title
 ax.set_xlabel('Longitude')
 ax.set_ylabel('Latitude')
 # ax.set_title('Road Coordinates and Intersections Visualization')
 ax.set_title('Intersections Visualization')
+
 ax.legend()
 
 # Show the plot

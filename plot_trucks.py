@@ -1,8 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Load the adjusted data
-file_path = 'Data/trucks.csv'  # Adjust the path as necessary
+# Load the data
+file_path = 'Data/trucks.csv'  # Replace with the actual file path
 data = pd.read_csv(file_path)
 
 # Create a plot
